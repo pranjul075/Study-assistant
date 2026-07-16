@@ -13,7 +13,6 @@
 6. [AI Usage Note](#ai-usage-note)
 7. [Architecture & Key Decisions](#architecture--key-decisions)
 8. [Known Limitations & What I'd Do Next](#known-limitations--what-id-do-next)
-9. [Time Spent](#time-spent)
 
 ---
 
@@ -164,17 +163,3 @@ When a user refines their study guide, the app compares incoming flashcard quest
 | No chart/block type variety | Add a `type` discriminant to the JSON schema so the AI can return bar charts (for quantitative data), timeline blocks, or concept maps |
 | Mock Mode quiz questions are static | Add a procedural generation engine for richer mock content |
 | No undo for history deletion | Add a toast/undo mechanism for accidental deletes |
-
----
-
-## Time Spent
-
-| Phase | Hours |
-|---|---|
-| Planning, architecture design, API exploration | ~1.0 hr |
-| Backend (Express server, Gemini integration, mock engine) | ~1.5 hrs |
-| Frontend component development (Flashcards, Quiz, Checklist, Dashboard) | ~2.5 hrs |
-| CSS design system, animations, responsiveness | ~1.5 hrs |
-| App.tsx wiring, race conditions, refinement loop, session persistence | ~1.0 hr |
-| TypeScript fixes, build verification, README | ~0.5 hr |
-| **Total** | **~8.0 hrs** |
