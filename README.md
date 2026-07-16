@@ -1,165 +1,136 @@
 # AuraStudy – AI-Powered Study Assistant
 
-> **Frontend Internship Assignment** – A production-quality React application that transforms free-form notes or topics into interactive flashcards, quizzes, and study checklists powered by the Gemini API.
+AuraStudy is a web application that helps students and professionals convert unstructured text notes or study topics into active learning sets. The app parses materials into three interactive modules: 3D double-sided flashcards, customizable multiple-choice quizzes, and structured concept checklists.
 
----
+To protect API credentials, client requests are routed through a secure Node.js proxy server that calls the Gemini 1.5 Flash API. The system handles unstructured outputs reliably by enforcing schema validation, normalizing parsed JSON, and managing request cancellations.
 
 ## Table of Contents
-1. [Demo & Features](#demo--features)
+1. [Core Features](#core-features)
 2. [Tech Stack](#tech-stack)
 3. [Setup & Installation](#setup--installation)
 4. [Running Locally](#running-locally)
-5. [Using the App](#using-the-app)
-6. [AI Usage Note](#ai-usage-note)
-7. [Architecture & Key Decisions](#architecture--key-decisions)
-8. [Known Limitations & What I'd Do Next](#known-limitations--what-id-do-next)
+5. [User Guide](#user-guide)
+6. [AI Usage Disclosure](#ai-usage-disclosure)
+7. [System Architecture & Error Handling](#system-architecture--error-handling)
+8. [Known Limitations & Future Scope](#known-limitations--future-scope)
 
 ---
 
-## Demo & Features
+## Core Features
 
-### Core Features (All Required Items Implemented)
-- ✅ **Free-form text input** – Paste raw notes, copy-paste study guides, or type a topic name
-- ✅ **Real LLM API** – Proxied through a Node.js Express backend to the Gemini 1.5 Flash API; the key is never in the browser
-- ✅ **Structured data rendering** – AI returns JSON; the app parses it and renders interactive stateful components — not a chatbot
-- ✅ **Flashcards** – 3D CSS-flip cards with keyboard navigation (Space = flip, Left/Right Arrows = navigate, Up Arrow = Mark Mastered, Down Arrow = Mark Review)
-- ✅ **Quiz** – Multiple-choice with immediate color-coded feedback, explanations, score, and **re-test wrong answers only**
-- ✅ **Checklist** – Concept milestone tracking with animated progress bar
-- ✅ **Loading, error, and empty states** – Multi-step animated loading overlay, graceful error fallback with retry
-- ✅ **Handles bad AI output** – Schema validation, JSON strip-cleaning, shape-checking on the server; corrupted or missing fields default gracefully
-- ✅ **Race condition prevention** – `AbortController` on every request; stale responses never overwrite newer ones
-- ✅ **Mobile responsive** – Fluid layout at all breakpoints, sidebar overlay on mobile
-
-### Stretch Features Implemented
-- ✅ **Refinement loop** – Re-prompt the model with feedback ("make it harder", "translate to Spanish"); smart merge preserves mastery progress on unchanged cards
-- ✅ **Session persistence** – Full LocalStorage save/load/delete of study history with progress tracking
-- ✅ **Dark mode + animations** – Premium glassmorphism design, 3D card transforms, slide/fade-in micro-animations
-- ✅ **Keyboard navigation** – Full flashcard keyboard controls documented in the UI
-- ✅ **Mock AI Mode** – Fallback for running without any API key; works seamlessly out of the box
+- **Free-Form Note Parser**: Input raw text, study guides, or topics up to 5,000 characters.
+- **Structured Data UI**: Parsed JSON outputs map directly to interactive, stateful components instead of a chatbot interface.
+- **3D Flashcards**: Flip cards with full keyboard controls (Space to flip, Left/Right arrows to navigate, Up/Down arrows to categorize as "Mastered" or "Review").
+- **Multiple-Choice Quizzes**: Inline validation showing option correctness, detailed explanations for every answer, and a state machine enabling re-testing of only incorrect questions.
+- **Milestone Checklist**: Tracks concept progress with a progress bar and completion states.
+- **Refinement Loop**: Refine the generated study guide using follow-up instructions (e.g., translating text, focusing on a subtopic). The application merges new content while preserving existing card mastery progress.
+- **Session History**: Automatic persistence to localStorage with a sidebar panel to reload or clear past study sessions.
+- **Network & Parse Resilience**: Graceful error UI with one-click retry triggers. Stale or slow responses are discarded using client-side AbortController guards to prevent race conditions.
+- **Mock Fallback Engine**: Fully functional local mock mode to test the frontend and refinement loops without requiring a live Gemini API key.
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 19, TypeScript, Vite |
-| Styling | Vanilla CSS (custom design system, glassmorphism, animations) |
-| Icons | Lucide React |
-| Backend | Node.js, Express |
-| AI Provider | Google Gemini 1.5 Flash via `@google/generative-ai` |
-| Fonts | Google Fonts (Outfit, Plus Jakarta Sans) |
+- **Frontend**: React 19, TypeScript, Vite
+- **Styling**: Vanilla CSS (custom design system, dark-mode glassmorphism, responsive grid layout)
+- **Icons**: Lucide React
+- **Backend**: Node.js, Express
+- **AI Integration**: Google Gemini 1.5 Flash (via `@google/generative-ai` SDK)
 
 ---
 
 ## Setup & Installation
 
 ### Prerequisites
-- Node.js 18+
-- A Gemini API key from [Google AI Studio](https://aistudio.google.com/) *(optional — Mock AI Mode works without it)*
+- Node.js 18 or higher
+- Google AI Studio API Key (optional; mock fallback is active by default)
 
-### 1. Clone & Install
-
+### 1. Clone the Repository and Install Dependencies
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/pranjul075/Study-assistant.git
 cd "AI study Assistant"
-npm run install:all
+npm install
 ```
+*(Note: A `postinstall` hook runs automatically to install dependencies for both the frontend and backend).*
 
-This single command installs dependencies for both the React frontend and the Node backend.
-
-### 2. Configure the API Key (Optional)
-
-Open `backend/.env` and replace the placeholder with your key:
-
+### 2. Configure Environment Variables (Optional)
+Create a `.env` file in the `backend` folder based on the template:
+```bash
+cp backend/.env.example backend/.env
+```
+Open `backend/.env` and replace `your_api_key_here` with your Gemini API key:
 ```env
-GEMINI_API_KEY=AIza...your_real_key_here
+GEMINI_API_KEY=AIzaSy...your_actual_key...
 PORT=5001
 ```
-
-> **If you skip this step**, the app runs in **Mock AI Mode** — the backend will generate rich, realistic mock study sets locally so the entire UI is fully testable without any external API.
+*If no key is configured, the server operates in Mock AI Mode, returning dynamic, structured local mock data.*
 
 ---
 
 ## Running Locally
 
+To start the frontend and backend servers concurrently, run:
 ```bash
-npm run dev
+npm start
 ```
-
-This single command starts both services concurrently:
-
-| Service | URL |
-|---|---|
-| React Frontend | http://localhost:5173 |
-| Express Backend | http://localhost:5001 |
-
-> The backend status badge in the UI will indicate whether you are connected to live Gemini or running in Mock Mode.
+This runs:
+- React Frontend (Vite) on http://localhost:5173
+- Express API Server on http://localhost:5001 (proxied automatically via Vite configuration)
 
 ---
 
-## Using the App
+## User Guide
 
-1. **Paste your notes** into the text area, or click one of the **Quick Demo** buttons to pre-fill sample content.
-2. Click **Generate Study Kit** and watch the animated loading indicator.
-3. Your study session opens in the **Dashboard** with four tabs:
-   - **Overview** – Topic summary, mastery metrics, and the **Refinement Loop** (type instructions to modify the kit).
-   - **Flashcards** – Flip cards with keyboard shortcuts. Mark cards Mastered or Needs Review.
-   - **Quiz** – Answer multiple-choice questions. After finishing, **Re-test Wrong Answers** to focus only on your gaps.
-   - **Checklist** – Tick off concept milestones as you review them.
-4. Sessions are **automatically saved** to history. Click **History** in the header to reload any past session.
+1. **Input Notes**: Paste study text or select a demo template (e.g., Photosynthesis or React Hooks) on the home screen.
+2. **Review Deck**: Use the tabs to toggle between flashcards, quizzes, and checklists.
+3. **Master Flashcards**: Use arrow keys to navigate and mark card status. The progress bar displays your mastery splits.
+4. **Take Quizzes**: Select answers. On completion, click "Re-test Wrong Answers" to isolate and answer only missed questions.
+5. **Update Guide**: Use the input field under the Overview tab to specify follow-up instructions.
 
 ---
 
-## AI Usage Note
+## AI Usage Disclosure
 
-**Tools used:** Anthropic Claude (via Antigravity IDE) for code scaffolding and iterative development.
+### Tools Used
+- **Anthropic Claude (via Antigravity IDE)** for component structuring and TypeScript troubleshooting.
 
-**What I used AI for:**
-- Generating the initial skeleton of component files which I then reviewed and customized.
-- Suggesting TypeScript interface design for the study session data model.
-- Helping write the system prompt / JSON schema instruction sent to Gemini.
-- Debugging TypeScript strict-mode `verbatimModuleSyntax` import errors.
+### AI Assistance Log
+- Scaffolding the boilerplate React component structures.
+- Suggesting the TypeScript interface schema for study objects.
+- Adjusting prompt configurations for Gemini schema compliance.
+- Resolving compiler errors related to strict strict-mode type imports (`verbatimModuleSyntax`).
 
-**What I did myself:**
-- Designing the full UI/UX architecture (tab navigation, refinement loop, 3D flip cards, progress metrics).
-- The core `AbortController` race-condition logic in `App.tsx`.
-- The smart card-merge algorithm in `handleRefine()` that preserves user mastery progress across refinements.
-- All CSS design decisions, animations, and the glassmorphism design system.
-- The Mock AI engine and pre-built topic data in `backend/index.js`.
-- Structural debugging and wiring all components together.
-
-I can explain every line of code and extend it live in an interview.
+### Original Work
+- Architected the application state and components integration in `App.tsx`.
+- Implemented the client-side `AbortController` cancellation engine to block race conditions.
+- Programmed the smart merge logic that compares incoming card arrays and maintains card status records.
+- Designed the CSS stylesheet, including the responsive dark glassmorphism layout and 3D card flipping transforms.
+- Built the local Mock AI routing system in Express.
 
 ---
 
-## Architecture & Key Decisions
+## System Architecture & Error Handling
 
-### Why a Backend Proxy?
-The Gemini API key must never be shipped to the browser. The Express server in `backend/index.js` holds the key in a `.env` file that is `.gitignore`d and forwards requests to the Gemini API.
+### API Proxy Configuration
+To prevent client-side credential exposure, the React app forwards all generation requests to `/api/generate`, which Vite proxies to the Express backend. The backend securely injects the `GEMINI_API_KEY` from local environment variables.
 
-### Handling Bad AI Output
-The backend enforces two layers of defense:
-1. **Prompt engineering** – The system instruction specifies exact JSON structure with TypeScript-style comments.
-2. **Server-side validation** – After parsing, every field is type-checked and shape-validated. Missing arrays default to `[]`, missing strings default to safe fallbacks. The frontend never crashes on invalid output.
+### Resilience Against Bad AI Output
+The system handles malformed output on three levels:
+1. **Model Parameter Constraints**: We enforce strict schema parsing using `responseMimeType: "application/json"` in the Gemini generation config.
+2. **Server-Side Sanitization**: The Express endpoint uses regex to strip markdown code blocks (e.g. ````json ... ````) if returned, parses the JSON, and inspects the output. If fields are missing or typed incorrectly, it enforces defaults (e.g. converting nulls to empty arrays) to guarantee the shape.
+3. **Client-Side Boundaries**: HTTP failures and parse exceptions are captured within the frontend framework and rendered as non-blocking `ErrorFallback` views with simple retry triggers.
 
-The client adds a third layer by validating the HTTP response status before processing, and wrapping everything in try/catch blocks.
+### Race Condition Mitigation
+In active typing or fast generation environments, network latency can cause old requests to settle after newer ones. The React app handles this by maintaining a mutable reference to an active `AbortController`. Triggering a new generation aborts any in-flight request instantly.
 
-### Race Condition Prevention
-Every call to `handleGenerate` and `handleRefine` in `App.tsx` creates a new `AbortController` and immediately calls `.abort()` on the previous controller if one exists. The `finally` block only clears the loading state if the controller is still the *current* one — stale responses are silently discarded.
-
-### Smart Merge on Refinement
-When a user refines their study guide, the app compares incoming flashcard questions (normalized to lowercase) against the previous session's cards. Matching cards inherit the old `status` field (`mastered`, `review`, `new`). This means mastering a card survives refinements.
+### Smart Merging
+When the user refines their study guide, we compare incoming questions against the current deck. If a question matches one previously reviewed, we copy its progress status (`mastered` or `review`) into the new state so the user does not lose their learning metrics.
 
 ---
 
-## Known Limitations & What I'd Do Next
+## Known Limitations & Future Scope
 
-| Limitation | What I'd Do Next |
-|---|---|
-| No streaming support yet | Add `generateContentStream()` from the Gemini SDK and pipe chunks via SSE to the client for real-time generation feedback |
-| Sessions stored in `localStorage` only | Add a database (SQLite or Supabase) with user accounts for cloud-synced history |
-| Quiz state resets when navigating tabs | Lift quiz state to the `Dashboard` to persist answers across tab switches |
-| No chart/block type variety | Add a `type` discriminant to the JSON schema so the AI can return bar charts (for quantitative data), timeline blocks, or concept maps |
-| Mock Mode quiz questions are static | Add a procedural generation engine for richer mock content |
-| No undo for history deletion | Add a toast/undo mechanism for accidental deletes |
+- **No Streaming Support**: Future versions will use `generateContentStream()` and Server-Sent Events (SSE) to render parts of the cards as they generate.
+- **Tab State Resets**: Switching tabs currently resets active quiz response histories. Moving the current quiz state up to the dashboard controller is planned.
+- **LocalStorage Storage Limits**: Currently uses browser storage. Adding a lightweight SQLite or Postgres backend with user authentication would allow cross-device sync.
