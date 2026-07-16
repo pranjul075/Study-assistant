@@ -7,12 +7,13 @@ To protect API credentials, client requests are routed through a secure Node.js 
 ## Table of Contents
 1. [Core Features](#core-features)
 2. [Tech Stack](#tech-stack)
-3. [Setup & Installation](#setup--installation)
-4. [Running Locally](#running-locally)
-5. [User Guide](#user-guide)
-6. [AI Usage Disclosure](#ai-usage-disclosure)
-7. [System Architecture & Error Handling](#system-architecture--error-handling)
-8. [Known Limitations & Future Scope](#known-limitations--future-scope)
+3. [Project Structure](#project-structure)
+4. [Setup & Installation](#setup--installation)
+5. [Running Locally](#running-locally)
+6. [User Guide](#user-guide)
+7. [AI Usage Disclosure](#ai-usage-disclosure)
+8. [System Architecture & Error Handling](#system-architecture--error-handling)
+9. [Known Limitations & Future Scope](#known-limitations--future-scope)
 
 ---
 
@@ -37,6 +38,36 @@ To protect API credentials, client requests are routed through a secure Node.js 
 - **Icons**: Lucide React
 - **Backend**: Node.js, Express
 - **AI Integration**: Google Gemini 1.5 Flash (via `@google/generative-ai` SDK)
+
+---
+
+## Project Structure
+
+```text
+.
+├── backend/
+│   ├── .env.example       # Template for Gemini API credentials
+│   ├── index.js           # Express API proxy & local Mock AI engine
+│   └── package.json       # Node.js backend configuration
+├── src/
+│   ├── components/
+│   │   ├── Checklist.tsx  # Interactive milestone lists & progress tracker
+│   │   ├── Dashboard.tsx  # Coordinating tabs & refinement forms
+│   │   ├── ErrorFallback.tsx # Retry handlers & error views
+│   │   ├── Flashcards.tsx # 3D flip deck with keyboard shortcut listeners
+│   │   ├── Header.tsx     # Branding & history toggle interface
+│   │   ├── HistorySidebar.tsx # localStorage retrieval & session loader
+│   │   ├── InputForm.tsx  # Text editor & pre-filled sample guide chips
+│   │   └── Quiz.tsx       # MCQ state machine with re-testing wrong options
+│   ├── App.tsx            # Main state orchestrator & AbortController routing
+│   ├── index.css          # Dark-theme glassmorphism CSS layout & tokens
+│   ├── main.tsx           # React bootstrap entrypoint
+│   └── types.ts           # Shared study module interface types
+├── index.html             # Application entry with SEO configurations
+├── package.json           # Root task runner with postinstall scripts
+├── tsconfig.json          # TypeScript workspace compiler settings
+└── vite.config.ts         # Vite server with port 5001 proxy config
+```
 
 ---
 
