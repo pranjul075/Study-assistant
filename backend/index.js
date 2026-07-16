@@ -52,7 +52,30 @@ app.post('/api/generate', async (req, res) => {
     });
 
     const text = response.response.text();
-    const parsedData = JSON.parse(text);
+    console.log('Raw Gemini output:', text);
+
+    // Robust JSON parsing: strip markdown code blocks if model ignores instructions
+    let parsedData;
+    try {
+      parsedData = JSON.parse(text);
+    } catch (parseError) {
+      const cleanedText = text
+        .replace(/^```json\s*/i, '')
+        .replace(/```\s*$/, '')
+        .trim();
+      parsedData = JSON.parse(cleanedText);
+    }
+
+    // Shape validation — never crash the frontend on bad AI output
+    if (!parsedData.topic || typeof parsedData.topic !== 'string') {
+      parsedData.topic = prompt.substring(0, 30);
+    }
+    if (!parsedData.summary || typeof parsedData.summary !== 'string') {
+      parsedData.summary = 'Study guide generated for ' + parsedData.topic;
+    }
+    if (!Array.isArray(parsedData.flashcards)) parsedData.flashcards = [];
+    if (!Array.isArray(parsedData.quiz)) parsedData.quiz = [];
+    if (!Array.isArray(parsedData.checklist)) parsedData.checklist = [];
 
     // Validate shape - assign IDs
     parsedData.flashcards = (parsedData.flashcards || []).map((f, i) => ({
