@@ -151,8 +151,12 @@ DO NOT wrap your response in markdown code blocks like \`\`\`json. Return ONLY t
 `;
 
 app.get('/api/status', (req, res) => {
-  const isMock = !process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'your_api_key_here';
-  res.json({ isMockMode: isMock });
+  const hasGemini = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_api_key_here';
+  const hasGroq = process.env.GROQ_API_KEY && process.env.GROQ_API_KEY !== 'your_api_key_here';
+  res.json({ 
+    isMockMode: !hasGemini && !hasGroq,
+    provider: hasGroq ? 'groq' : (hasGemini ? 'gemini' : 'mock')
+  });
 });
 
 app.post('/api/generate', async (req, res) => {
@@ -162,7 +166,9 @@ app.post('/api/generate', async (req, res) => {
     return res.status(400).json({ error: 'Prompt is required.' });
   }
 
-  const isMockMode = !process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'your_api_key_here';
+  const hasGemini = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_api_key_here';
+  const hasGroq = process.env.GROQ_API_KEY && process.env.GROQ_API_KEY !== 'your_api_key_here';
+  const isMockMode = !hasGemini && !hasGroq;
 
   // Handle Mock Mode
   if (isMockMode) {
@@ -200,18 +206,11 @@ app.post('/api/generate', async (req, res) => {
     return res.json(mockResult);
   }
 
-  // Handle Real AI Generation with Gemini
-  try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
-      systemInstruction: SYSTEM_INSTRUCTION
-    });
-
-    let fullPrompt = "";
-    if (existingData && refinementFeedback) {
-      // Refinement prompt engineering
-      fullPrompt = `
+  // Generate full prompt
+  let fullPrompt = "";
+  if (existingData && refinementFeedback) {
+    // Refinement prompt engineering
+    fullPrompt = `
 Here is the existing study guide we generated:
 ${JSON.stringify(existingData, null, 2)}
 
@@ -220,19 +219,58 @@ The user wants to refine/modify this study guide with the following feedback:
 
 Please update the study guide to incorporate this feedback. Keep unchanged components exactly as they were if they still apply, but modify, add, or delete cards, quiz questions, and checklists to reflect the request. Ensure the output format is identical.
 `;
-    } else {
-      fullPrompt = `Please generate a study guide for the following text or topic: "${prompt}"`;
-    }
+  } else {
+    fullPrompt = `Please generate a study guide for the following text or topic: "${prompt}"`;
+  }
 
-    const response = await model.generateContent({
-      contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
-      generationConfig: {
-        responseMimeType: 'application/json'
+  // Handle Real AI Generation
+  try {
+    let text = "";
+
+    if (hasGroq) {
+      console.log(`[Groq AI Mode] Generating study guide via llama-3.3-70b-versatile for: "${prompt}"`);
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            { role: "system", content: SYSTEM_INSTRUCTION },
+            { role: "user", content: fullPrompt }
+          ],
+          response_format: { type: "json_object" }
+        })
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`Groq API returned status ${response.status}: ${errText}`);
       }
-    });
 
-    const text = response.response.text();
-    console.log("Raw Gemini API Output:", text);
+      const resData = await response.json();
+      text = resData.choices[0].message.content;
+      console.log("Raw Groq API Output:", text);
+    } else {
+      console.log(`[Gemini AI Mode] Generating study guide via gemini-2.0-flash for: "${prompt}"`);
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({
+        model: "gemini-2.0-flash",
+        systemInstruction: SYSTEM_INSTRUCTION
+      });
+
+      const response = await model.generateContent({
+        contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
+        generationConfig: {
+          responseMimeType: 'application/json'
+        }
+      });
+
+      text = response.response.text();
+      console.log("Raw Gemini API Output:", text);
+    }
 
     // Robust JSON parsing
     let parsedData;
@@ -281,7 +319,7 @@ Please update the study guide to incorporate this feedback. Keep unchanged compo
 
     res.json(parsedData);
   } catch (err) {
-    console.error("Gemini Generation Error:", err);
+    console.error("AI Generation Error:", err);
     res.status(500).json({
       error: "Failed to generate study guide. The AI service returned an error or malformed output.",
       details: err.message
@@ -291,7 +329,11 @@ Please update the study guide to incorporate this feedback. Keep unchanged compo
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'your_api_key_here') {
-    console.warn("⚠️  Warning: GEMINI_API_KEY is not defined in the environment. Server is running in Mock Mode.");
+  const hasGemini = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_api_key_here';
+  const hasGroq = process.env.GROQ_API_KEY && process.env.GROQ_API_KEY !== 'your_api_key_here';
+  if (!hasGemini && !hasGroq) {
+    console.warn("⚠️  Warning: Neither GEMINI_API_KEY nor GROQ_API_KEY is defined in the environment. Server is running in Mock Mode.");
+  } else {
+    console.log(`Server is running with ${hasGroq ? 'Groq (llama-3.3-70b-versatile)' : 'Gemini (gemini-2.0-flash)'} as the active AI provider.`);
   }
 });
