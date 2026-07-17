@@ -6,7 +6,7 @@ import { Dashboard } from './components/Dashboard';
 import { ErrorFallback } from './components/ErrorFallback';
 import type { StudySession, Flashcard, ChecklistItem } from './types';
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 export default function App() {
   // Persistence state
