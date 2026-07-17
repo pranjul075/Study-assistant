@@ -2,7 +2,7 @@
 
 AuraStudy is a web application that helps students and professionals convert unstructured text notes or study topics into active learning sets. The app parses materials into three interactive modules: 3D double-sided flashcards, customizable multiple-choice quizzes, and structured concept checklists.
 
-To protect API credentials, client requests are routed through a secure Node.js proxy server that calls the Gemini 1.5 Flash API. The system handles unstructured outputs reliably by enforcing schema validation, normalizing parsed JSON, and managing request cancellations.
+To protect API credentials, client requests are routed through a secure Node.js proxy server that calls the Groq Cloud API (utilizing Llama-3.3-70b-versatile). The system handles unstructured outputs reliably by enforcing schema validation, normalizing parsed JSON, and managing request cancellations.
 
 - **Live Project Demo**: [study-assistant-dhwm.onrender.com](https://study-assistant-dhwm.onrender.com)
 - **Demo Video**: [Google Drive Video Showcase](https://drive.google.com/file/d/119eDloJ-WAcqhUt-_Q2qxkZhCRK1gsHi/view?usp=sharing)
@@ -31,7 +31,7 @@ To protect API credentials, client requests are routed through a secure Node.js 
 - **Refinement Loop**: Refine the generated study guide using follow-up instructions (e.g., translating text, focusing on a subtopic). The application merges new content while preserving existing card mastery progress.
 - **Session History**: Automatic persistence to localStorage with a sidebar panel to reload or clear past study sessions.
 - **Network & Parse Resilience**: Graceful error UI with one-click retry triggers. Stale or slow responses are discarded using client-side AbortController guards to prevent race conditions.
-- **Mock Fallback Engine**: Fully functional local mock mode to test the frontend and refinement loops without requiring a live Gemini API key.
+- **Mock Fallback Engine**: Fully functional local mock mode to test the frontend and refinement loops without requiring a live Groq API key.
 
 ---
 
@@ -41,7 +41,7 @@ To protect API credentials, client requests are routed through a secure Node.js 
 - **Styling**: Vanilla CSS (custom design system, dark-mode glassmorphism, responsive grid layout)
 - **Icons**: Lucide React
 - **Backend**: Node.js, Express
-- **AI Integration**: Google Gemini 1.5 Flash (via `@google/generative-ai` SDK)
+- **AI Integration**: Llama-3.3-70b-versatile (via Groq Cloud API)
 
 ---
 
@@ -50,7 +50,7 @@ To protect API credentials, client requests are routed through a secure Node.js 
 ```text
 .
 ├── backend/
-│   ├── .env.example       # Template for Gemini API credentials
+│   ├── .env.example       # Template for Groq API credentials
 │   ├── index.js           # Express API proxy & local Mock AI engine
 │   └── package.json       # Node.js backend configuration
 ├── src/
@@ -79,7 +79,7 @@ To protect API credentials, client requests are routed through a secure Node.js 
 
 ### Prerequisites
 - Node.js 18 or higher
-- Google AI Studio API Key (optional; mock fallback is active by default)
+- Groq API Key (optional; mock fallback is active by default)
 
 ### 1. Clone the Repository and Install Dependencies
 ```bash
@@ -94,9 +94,9 @@ Create a `.env` file in the `backend` folder based on the template:
 ```bash
 cp backend/.env.example backend/.env
 ```
-Open `backend/.env` and replace `your_api_key_here` with your Gemini API key:
+Open `backend/.env` and replace `your_api_key_here` with your Groq API key:
 ```env
-GEMINI_API_KEY=AIzaSy...your_actual_key...
+GROQ_API_KEY=gsk_...your_actual_key...
 PORT=5001
 ```
 *If no key is configured, the server operates in Mock AI Mode, returning dynamic, structured local mock data.*
@@ -133,7 +133,7 @@ This runs:
 ### AI Assistance Log
 - Scaffolding the boilerplate React component structures.
 - Suggesting the TypeScript interface schema for study objects.
-- Adjusting prompt configurations for Gemini schema compliance.
+- Adjusting prompt configurations for JSON schema compliance.
 - Resolving compiler errors related to strict strict-mode type imports (`verbatimModuleSyntax`).
 
 ### Original Work
@@ -148,11 +148,11 @@ This runs:
 ## System Architecture & Error Handling
 
 ### API Proxy Configuration
-To prevent client-side credential exposure, the React app forwards all generation requests to `/api/generate`, which Vite proxies to the Express backend. The backend securely injects the `GEMINI_API_KEY` from local environment variables.
+To prevent client-side credential exposure, the React app forwards all generation requests to `/api/generate`, which Vite proxies to the Express backend. The backend securely injects the `GROQ_API_KEY` from local environment variables.
 
 ### Resilience Against Bad AI Output
 The system handles malformed output on three levels:
-1. **Model Parameter Constraints**: We enforce strict schema parsing using `responseMimeType: "application/json"` in the Gemini generation config.
+1. **Model Parameter Constraints**: We enforce strict schema parsing by requesting structured JSON formatting via Llama system prompt parameters.
 2. **Server-Side Sanitization**: The Express endpoint uses regex to strip markdown code blocks (e.g. ````json ... ````) if returned, parses the JSON, and inspects the output. If fields are missing or typed incorrectly, it enforces defaults (e.g. converting nulls to empty arrays) to guarantee the shape.
 3. **Client-Side Boundaries**: HTTP failures and parse exceptions are captured within the frontend framework and rendered as non-blocking `ErrorFallback` views with simple retry triggers.
 
@@ -180,7 +180,7 @@ Here is the breakdown of the 8 hours spent on developing this project:
 | :--- | :--- | :--- |
 | **Project Setup & Backend Proxy** | 1.0 hr | Initializing React/Vite, Express backend, dependency installation, and routing configurations. |
 | **UI Design System & Styling** | 1.5 hrs | Establishing the Vanilla CSS design system, dark-mode glassmorphism, responsive dashboard layout, and 3D card flip animations. |
-| **AI Integration & Schema Validation** | 1.5 hrs | Integrating Google Gemini 1.5 Flash SDK, prompt tuning, server-side JSON sanitization/validation, and mock AI fallback mechanism. |
+| **AI Integration & Schema Validation** | 1.5 hrs | Integrating Groq API (Llama-3.3-70b), prompt tuning, server-side JSON sanitization/validation, and mock AI fallback mechanism. |
 | **Interactive Study Modules** | 2.5 hrs | Developing the 3D Flashcards (with keyboard shortcuts), Quiz state machine (including re-testing of incorrect answers), and Milestone checklist. |
 | **State Management & Refinement Loop** | 1.0 hr | Coding the prompt refinement input, App-level state orchestration, localStorage session history sidebar, and smart merging logic. |
 | **Deployment & Verification** | 0.5 hr | Deployment setup on Render, verifying production builds, and documentation. |
