@@ -256,13 +256,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0c1324] text-[#dce1fb] overflow-x-hidden relative pb-12 font-body-md">
-      {/* Atmospheric Background Orbs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="orb w-[600px] h-[600px] bg-primary-fixed-dim -top-20 -left-20"></div>
-        <div className="orb w-[500px] h-[500px] bg-secondary-fixed-dim top-1/2 -right-40" style={{ animationDelay: '-5s' }}></div>
-        <div className="orb w-[400px] h-[400px] bg-tertiary-fixed-dim bottom-0 left-1/3" style={{ animationDelay: '-12s' }}></div>
-      </div>
+    <div className="min-h-screen bg-[#050505] text-[#e5e2e1] overflow-x-hidden relative pb-12 font-body-md">
+      {/* Atmospheric Background Blobs */}
+      <div className="nebula-blob bg-primary top-[-10%] left-[-10%]"></div>
+      <div className="nebula-blob bg-secondary bottom-[-10%] right-[-10%]" style={{ animationDelay: '-5s' }}></div>
 
       <Header 
         onToggleHistory={() => setHistoryOpen(!historyOpen)} 
