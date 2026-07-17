@@ -11,17 +11,17 @@ interface InputFormProps {
 
 const TEMPLATES = [
   {
-    label: "Photosynthesis",
+    label: "Photosynthesis Guide",
     icon: "🌱",
     text: "Photosynthesis is the process used by plants, algae and certain bacteria to harness energy from sunlight and turn it into chemical energy. Key concepts: Light-dependent reactions (takes place in thylakoid membranes, splits H2O, produces ATP, NADPH, and O2 byproduct) and Light-independent reactions (Calvin Cycle, occurs in stroma, fixes CO2 using RuBisCO, produces G3P/glucose)."
   },
   {
-    label: "React Hooks",
+    label: "React Hooks Cheat Sheet",
     icon: "⚛️",
     text: "React Hooks allow functional components to manage state and side effects. Rules of hooks: only call at top level, only call from React functions. Main hooks: useState (adds state), useEffect (manages side effects and cleanup), useContext (consumes contexts), useMemo (memoizes computed values), useCallback (memoizes functions), useRef (persists values across renders without re-rendering)."
   },
   {
-    label: "Mitochondria",
+    label: "Mitochondria Anatomy",
     icon: "🔋",
     text: "Mitochondria are the double-membraned powerhouses of the cell. They contain an outer membrane, an intermembrane space, an inner membrane (folded into cristae to maximize surface area), and the matrix inside. Responsible for aerobic respiration: Link reaction and Krebs cycle occur in the matrix, while the electron transport chain (ETC) and oxidative phosphorylation occur on the inner membrane cristae."
   }
@@ -80,18 +80,18 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
   }, []);
 
   return (
-    <div className="w-full space-y-32">
+    <div className="w-full space-y-16 max-w-max-width mx-auto">
       
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center py-20 space-y-8 text-center animate-fade-in max-w-md mx-auto">
-          <div className="relative w-24 h-24 flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center py-12 space-y-6 text-center animate-fade-in max-w-sm mx-auto">
+          <div className="relative w-14 h-14 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full border-4 border-primary-fixed-dim/20 animate-pulse"></div>
             <div className="absolute inset-0 rounded-full border-t-4 border-r-4 border-primary-fixed-dim animate-spin"></div>
-            <span className="material-symbols-outlined text-[36px] text-primary-fixed-dim">auto_awesome</span>
+            <span className="material-symbols-outlined text-[20px] text-primary-fixed-dim">auto_awesome</span>
           </div>
-          <div className="space-y-3">
-            <h3 className="font-headline-md text-headline-md text-primary">Formulating Pathway</h3>
-            <p className="font-body-lg text-body-lg text-on-surface-variant animate-pulse">
+          <div className="space-y-2">
+            <h3 className="text-lg font-bold text-primary">Formulating Pathway</h3>
+            <p className="text-sm text-on-surface-variant animate-pulse leading-relaxed">
               {LOADING_STEPS[loadingStepIndex]}
             </p>
           </div>
@@ -99,37 +99,37 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
       ) : (
         <>
           {/* Hero Section */}
-          <section className="text-center mb-16 max-w-4xl mx-auto space-y-6">
-            <h1 className="font-display-xl text-[44px] md:text-display-xl text-primary tracking-tight leading-none">
+          <section className="text-center max-w-3xl mx-auto space-y-4 pt-4">
+            <h1 className="font-display-xl text-3xl md:text-[44px] text-primary tracking-tight leading-tight">
               Precision Learning <br />
               <span className="text-gradient">for Technical Minds.</span>
             </h1>
-            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+            <p className="font-body-md text-base text-on-surface-variant max-w-xl mx-auto leading-relaxed">
               Transform dense technical documentation into interactive cognitive pathways. Designed for engineers, researchers, and polymaths.
             </p>
           </section>
 
           {/* Intelligent Studio Card */}
           <section>
-            <div className="glass-studio glowing-edge rounded-[32px] p-8 md:p-12 mx-auto max-w-max-width">
-              <div className="flex flex-col md:flex-row gap-8 items-start">
+            <div className="glass-studio glowing-edge rounded-2xl p-6 md:p-8 mx-auto">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
                 <div className="flex-1 w-full">
-                  <div className="flex items-center justify-between mb-8">
-                    <h2 className="font-headline-md text-headline-md text-primary">Intelligent Studio</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="font-headline-md text-xl md:text-2xl text-primary font-bold">Intelligent Studio</h2>
                     <div className="flex gap-2 items-center">
                       <span className="w-2 h-2 rounded-full bg-primary-fixed-dim animate-pulse"></span>
-                      <span className="font-label-mono text-label-mono text-on-surface-variant">READY TO ANALYZE</span>
+                      <span className="font-label-mono text-[10px] text-on-surface-variant tracking-wider">READY TO ANALYZE</span>
                     </div>
                   </div>
                   
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <p className="text-on-surface-variant font-body-md opacity-85 leading-relaxed">
-                      Paste your messy class notes, study guides, or simply type a topic you want to master. Our AI will structure it into a beautiful, interactive active study kit.
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <p className="text-on-surface-variant text-sm opacity-85 leading-relaxed">
+                      Paste your class notes, technical docs, or simply type a topic you want to master. Our AI will structure it into an interactive study kit.
                     </p>
 
                     <div className="relative group">
-                      <div className="absolute top-6 left-6 flex items-start pointer-events-none">
-                        <span className="material-symbols-outlined text-on-surface-variant">auto_awesome</span>
+                      <div className="absolute top-4 left-4 flex items-start pointer-events-none">
+                        <span className="material-symbols-outlined text-[20px] text-on-surface-variant">auto_awesome</span>
                       </div>
                       <textarea 
                         value={prompt}
@@ -137,23 +137,23 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
                         placeholder="Paste technical docs, notes, code snippets, or study outlines..."
                         maxLength={5000}
                         required
-                        className="w-full pl-14 pr-6 py-6 bg-white/5 border-none rounded-2xl text-primary placeholder-on-surface-variant/30 focus:ring-2 focus:ring-primary/45 outline-none transition-all text-body-md min-h-[160px] resize-none"
+                        className="w-full pl-11 pr-4 py-4 bg-white/5 border border-white/5 focus:border-white/10 rounded-xl text-primary placeholder-on-surface-variant/30 focus:ring-2 focus:ring-primary/45 outline-none transition-all text-sm min-h-[120px] resize-none"
                       />
-                      <div className="absolute bottom-4 right-6 font-label-mono text-label-mono text-on-surface-variant/50">
+                      <div className="absolute bottom-3 right-4 font-label-mono text-[10px] text-on-surface-variant/50">
                         {prompt.length}/5000
                       </div>
                     </div>
 
                     {/* Demos section */}
                     <div className="space-y-2">
-                      <span className="font-label-mono text-label-mono text-on-surface-variant uppercase">Quick Demos:</span>
+                      <span className="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-wider">Quick Demos:</span>
                       <div className="flex flex-wrap gap-2">
                         {TEMPLATES.map((tpl, i) => (
                           <button
                             key={i}
                             type="button"
                             onClick={() => handleApplyTemplate(tpl.text)}
-                            className="bg-white/5 hover:bg-white/10 hover:text-primary text-on-surface-variant px-3 py-2 text-[13px] rounded-xl flex items-center gap-sm transition-all duration-300 border border-white/5"
+                            className="bg-white/5 hover:bg-white/10 hover:text-primary text-on-surface-variant px-3 py-1.5 text-xs rounded-lg flex items-center gap-xs transition-all duration-300 border border-white/5"
                           >
                             <span>{tpl.icon}</span>
                             <span>{tpl.label}</span>
@@ -162,17 +162,17 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
                       </div>
                     </div>
 
-                    <div className="pt-2 flex items-center justify-between">
+                    <div className="pt-1 flex items-center justify-between">
                       {isMockMode && (
-                        <span className="text-secondary-fixed-dim text-xs font-label-mono flex items-center gap-xs">
-                          <span className="material-symbols-outlined text-[16px]">info</span>
+                        <span className="text-secondary-fixed-dim text-[11px] font-label-mono flex items-center gap-xs">
+                          <span className="material-symbols-outlined text-[14px]">info</span>
                           MOCK AI MODE
                         </span>
                       )}
                       <button 
                         type="submit"
                         disabled={!prompt.trim()}
-                        className="w-full py-6 rounded-full bg-gradient-to-r from-primary-fixed-dim via-secondary-fixed-dim to-tertiary-fixed-dim text-on-primary-fixed font-bold text-lg hover:shadow-[0_0_30px_rgba(153,212,174,0.3)] transition-all duration-500 active:scale-95 disabled:opacity-40 disabled:pointer-events-none"
+                        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary-fixed-dim via-secondary-fixed-dim to-tertiary-fixed-dim text-on-primary-fixed font-bold text-base hover:shadow-[0_0_20px_rgba(153,212,174,0.2)] transition-all duration-500 active:scale-95 disabled:opacity-40 disabled:pointer-events-none"
                       >
                         Generate Cognitive Pathway
                       </button>
@@ -186,8 +186,8 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
           {/* Bento Grid Insights */}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
             {/* Featured Module */}
-            <div className="md:col-span-2 glass-studio rounded-[24px] overflow-hidden group">
-              <div className="h-64 relative">
+            <div className="md:col-span-2 glass-studio rounded-2xl overflow-hidden group flex flex-col justify-between">
+              <div className="h-44 relative overflow-hidden">
                 <img 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
                   alt="Neural Network conceptual visual"
@@ -195,13 +195,13 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface-dim to-transparent opacity-60"></div>
               </div>
-              <div className="p-8">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="font-label-mono text-label-mono text-secondary px-2 py-1 bg-secondary/10 rounded">SYSTEM RECOMMENDED</span>
-                  <span className="text-on-surface-variant font-label-mono text-label-mono">12 MIN READ</span>
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="font-label-mono text-[10px] text-secondary px-2 py-0.5 bg-secondary/10 rounded">SYSTEM RECOMMENDED</span>
+                  <span className="text-on-surface-variant font-label-mono text-[10px]">12 MIN READ</span>
                 </div>
-                <h3 className="font-headline-md text-headline-md text-primary mb-4">Quantum Architecture Foundations</h3>
-                <p className="text-on-surface-variant mb-6">Explore the multi-layered intricacies of quantum logic gates and their implementation in error-correction protocols.</p>
+                <h3 className="text-lg font-bold text-primary mb-2">Quantum Architecture Foundations</h3>
+                <p className="text-on-surface-variant text-sm mb-4 leading-relaxed line-clamp-2">Explore the multi-layered intricacies of quantum logic gates and their implementation in error-correction protocols.</p>
                 <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
                   <div className="h-full w-2/3 bg-gradient-to-r from-secondary to-primary-fixed-dim"></div>
                 </div>
@@ -209,36 +209,36 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
             </div>
             {/* Side Cards */}
             <div className="flex flex-col gap-gutter">
-              <div className="glass-studio rounded-[24px] p-6 flex-1 flex flex-col justify-between">
+              <div className="glass-studio rounded-2xl p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <span className="material-symbols-outlined text-primary-fixed-dim mb-4 text-[28px]" style={{ fontVariationSettings: '"FILL" 1' }}>bolt</span>
-                  <h4 className="font-body-lg text-body-lg text-primary mb-2">Daily Sprint</h4>
-                  <p className="text-on-surface-variant text-sm">Reinforce 5 key concepts from your systems design library.</p>
+                  <span className="material-symbols-outlined text-primary-fixed-dim mb-2 text-[22px]" style={{ fontVariationSettings: '"FILL" 1' }}>bolt</span>
+                  <h4 className="font-body-lg text-base text-primary mb-1 font-bold">Daily Sprint</h4>
+                  <p className="text-on-surface-variant text-xs leading-relaxed">Reinforce 5 key concepts from your systems design library.</p>
                 </div>
                 <button 
                   onClick={() => handleApplyTemplate(TEMPLATES[0].text)}
-                  className="text-primary font-label-mono text-label-mono uppercase hover:tracking-widest transition-all text-left mt-4"
+                  className="text-primary font-label-mono text-[10px] uppercase hover:tracking-widest transition-all text-left mt-3"
                 >
                   Start Now →
                 </button>
               </div>
-              <div className="glass-studio rounded-[24px] p-6 flex-1 flex flex-col justify-between">
+              <div className="glass-studio rounded-2xl p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <span className="material-symbols-outlined text-secondary-fixed-dim mb-4 text-[28px]" style={{ fontVariationSettings: '"FILL" 1' }}>insights</span>
-                  <h4 className="font-body-lg text-body-lg text-primary mb-2">Retention Score</h4>
+                  <span className="material-symbols-outlined text-secondary-fixed-dim mb-2 text-[22px]" style={{ fontVariationSettings: '"FILL" 1' }}>insights</span>
+                  <h4 className="font-body-lg text-base text-primary mb-1 font-bold">Retention Score</h4>
                 </div>
-                <div className="flex items-end gap-2 mt-4">
-                  <span className="text-4xl font-bold text-primary">94%</span>
-                  <span className="text-primary-fixed-dim text-sm font-label-mono mb-1">+2.4%</span>
+                <div className="flex items-end gap-2 mt-2">
+                  <span className="text-3xl font-bold text-primary">94%</span>
+                  <span className="text-primary-fixed-dim text-xs font-label-mono mb-1">+2.4%</span>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Technical Pathways Row */}
-          <section className="pb-12">
-            <h2 className="font-headline-lg text-headline-lg text-primary mb-12">Active Pathways</h2>
-            <div className="flex gap-gutter overflow-x-auto pb-8 scrollbar-hide">
+          <section className="pb-8">
+            <h2 className="text-xl font-bold text-primary mb-4">Active Pathways</h2>
+            <div className="flex gap-gutter overflow-x-auto pb-4 scrollbar-hide">
               {sessions.length > 0 ? (
                 sessions.map((s) => {
                   const total = s.flashcards.length;
@@ -248,14 +248,14 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
                     <div 
                       key={s.id} 
                       onClick={() => onSelectSession(s.id)}
-                      className="min-w-[300px] glass-studio rounded-2xl p-6 hover:translate-y-[-8px] transition-transform duration-300 cursor-pointer"
+                      className="min-w-[260px] max-w-[280px] glass-studio rounded-xl p-5 hover:translate-y-[-4px] transition-all duration-300 cursor-pointer"
                     >
-                      <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-6">
-                        <span className="material-symbols-outlined text-secondary">memory</span>
+                      <div className="w-9 h-9 bg-white/5 rounded-lg flex items-center justify-center mb-4">
+                        <span className="material-symbols-outlined text-secondary text-[20px]">memory</span>
                       </div>
-                      <h5 className="text-primary font-bold mb-2 truncate">{s.topic}</h5>
-                      <p className="text-on-surface-variant text-sm mb-6 line-clamp-2">{s.summary}</p>
-                      <div className="flex justify-between items-center text-xs font-label-mono">
+                      <h5 className="text-primary font-bold text-sm mb-1 truncate">{s.topic}</h5>
+                      <p className="text-on-surface-variant text-xs mb-4 line-clamp-2 leading-relaxed">{s.summary}</p>
+                      <div className="flex justify-between items-center text-[10px] font-label-mono">
                         <span className="text-on-surface-variant">{mastered}/{total} MASTERED</span>
                         <span className="text-primary">{progress}%</span>
                       </div>
@@ -265,35 +265,35 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
               ) : (
                 <>
                   {/* Default Pathways when history is empty */}
-                  <div className="min-w-[300px] glass-studio rounded-2xl p-6 hover:translate-y-[-8px] transition-transform duration-300">
-                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-6">
-                      <span className="material-symbols-outlined text-secondary">memory</span>
+                  <div className="min-w-[260px] max-w-[280px] glass-studio rounded-xl p-5 hover:translate-y-[-4px] transition-all duration-300">
+                    <div className="w-9 h-9 bg-white/5 rounded-lg flex items-center justify-center mb-4">
+                      <span className="material-symbols-outlined text-secondary text-[20px]">memory</span>
                     </div>
-                    <h5 className="text-primary font-bold mb-2">Systems Design</h5>
-                    <p className="text-on-surface-variant text-sm mb-6">Distributed systems and consensus algorithms.</p>
-                    <div className="flex justify-between items-center text-xs font-label-mono">
+                    <h5 className="text-primary font-bold text-sm mb-1">Systems Design</h5>
+                    <p className="text-on-surface-variant text-xs mb-4 leading-relaxed">Distributed systems and consensus algorithms.</p>
+                    <div className="flex justify-between items-center text-[10px] font-label-mono">
                       <span className="text-on-surface-variant">8/12 MODULES</span>
                       <span className="text-primary">67%</span>
                     </div>
                   </div>
-                  <div className="min-w-[300px] glass-studio rounded-2xl p-6 hover:translate-y-[-8px] transition-transform duration-300">
-                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-6">
-                      <span className="material-symbols-outlined text-secondary">psychology</span>
+                  <div className="min-w-[260px] max-w-[280px] glass-studio rounded-xl p-5 hover:translate-y-[-4px] transition-all duration-300">
+                    <div className="w-9 h-9 bg-white/5 rounded-lg flex items-center justify-center mb-4">
+                      <span className="material-symbols-outlined text-secondary text-[20px]">psychology</span>
                     </div>
-                    <h5 className="text-primary font-bold mb-2">Neural Networks</h5>
-                    <p className="text-on-surface-variant text-sm mb-6">Deep learning architectures and backpropagation.</p>
-                    <div className="flex justify-between items-center text-xs font-label-mono">
+                    <h5 className="text-primary font-bold text-sm mb-1">Neural Networks</h5>
+                    <p className="text-on-surface-variant text-xs mb-4 leading-relaxed">Deep learning architectures and backpropagation.</p>
+                    <div className="flex justify-between items-center text-[10px] font-label-mono">
                       <span className="text-on-surface-variant">15/20 MODULES</span>
                       <span className="text-primary">75%</span>
                     </div>
                   </div>
-                  <div className="min-w-[300px] glass-studio rounded-2xl p-6 hover:translate-y-[-8px] transition-transform duration-300">
-                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-6">
-                      <span className="material-symbols-outlined text-secondary">terminal</span>
+                  <div className="min-w-[260px] max-w-[280px] glass-studio rounded-xl p-5 hover:translate-y-[-4px] transition-all duration-300">
+                    <div className="w-9 h-9 bg-white/5 rounded-lg flex items-center justify-center mb-4">
+                      <span className="material-symbols-outlined text-secondary text-[20px]">terminal</span>
                     </div>
-                    <h5 className="text-primary font-bold mb-2">Compiler Theory</h5>
-                    <p className="text-on-surface-variant text-sm mb-6">Lexical analysis and abstract syntax trees.</p>
-                    <div className="flex justify-between items-center text-xs font-label-mono">
+                    <h5 className="text-primary font-bold text-sm mb-1">Compiler Theory</h5>
+                    <p className="text-on-surface-variant text-xs mb-4 leading-relaxed">Lexical analysis and syntax trees.</p>
+                    <div className="flex justify-between items-center text-[10px] font-label-mono">
                       <span className="text-on-surface-variant">3/10 MODULES</span>
                       <span className="text-primary">30%</span>
                     </div>
@@ -304,17 +304,17 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
           </section>
 
           {/* Footer */}
-          <footer className="bg-surface-dim w-full py-gutter mt-auto border-t border-white/5 absolute left-0 right-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-margin-desktop max-w-max-width mx-auto">
-              <div className="space-y-4">
-                <span className="font-headline-sm text-headline-sm text-on-surface">AuraStudy</span>
-                <p className="font-label-mono text-label-mono text-on-surface-variant opacity-80">© 2024 AuraStudy. Precision Learning.</p>
+          <footer className="bg-surface-dim w-full py-4 mt-auto border-t border-white/5 absolute left-0 right-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-margin-desktop max-w-max-width mx-auto">
+              <div className="space-y-1">
+                <span className="text-sm font-bold text-on-surface">AuraStudy</span>
+                <p className="font-label-mono text-[9px] text-on-surface-variant opacity-80">© 2024 AuraStudy. Precision Learning.</p>
               </div>
-              <div className="flex flex-wrap gap-x-8 gap-y-4 md:justify-end items-center">
-                <a className="font-label-mono text-label-mono text-on-surface-variant hover:text-secondary transition-colors" href="#">About</a>
-                <a className="font-label-mono text-label-mono text-on-surface-variant hover:text-secondary transition-colors" href="#">Privacy</a>
-                <a className="font-label-mono text-label-mono text-on-surface-variant hover:text-secondary transition-colors" href="#">Terms</a>
-                <a className="font-label-mono text-label-mono text-on-surface-variant hover:text-secondary transition-colors" href="#">Support</a>
+              <div className="flex flex-wrap gap-x-6 gap-y-2 md:justify-end items-center">
+                <a className="font-label-mono text-[10px] text-on-surface-variant hover:text-secondary transition-colors" href="#">About</a>
+                <a className="font-label-mono text-[10px] text-on-surface-variant hover:text-secondary transition-colors" href="#">Privacy</a>
+                <a className="font-label-mono text-[10px] text-on-surface-variant hover:text-secondary transition-colors" href="#">Terms</a>
+                <a className="font-label-mono text-[10px] text-on-surface-variant hover:text-secondary transition-colors" href="#">Support</a>
               </div>
             </div>
           </footer>
