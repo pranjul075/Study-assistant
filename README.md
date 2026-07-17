@@ -1,11 +1,11 @@
 # AuraStudy – AI-Powered Study Assistant
 
-- **Live Project Demo**: [study-assistant-dhwm.onrender.com](https://study-assistant-dhwm.onrender.com)
-- **Demo Video**: [Google Drive Video Showcase](https://drive.google.com/file/d/119eDloJ-WAcqhUt-_Q2qxkZhCRK1gsHi/view?usp=sharing)
-
 AuraStudy is a web application that helps students and professionals convert unstructured text notes or study topics into active learning sets. The app parses materials into three interactive modules: 3D double-sided flashcards, customizable multiple-choice quizzes, and structured concept checklists.
 
 To protect API credentials, client requests are routed through a secure Node.js proxy server that calls the Gemini 1.5 Flash API. The system handles unstructured outputs reliably by enforcing schema validation, normalizing parsed JSON, and managing request cancellations.
+
+- **Live Project Demo**: [study-assistant-dhwm.onrender.com](https://study-assistant-dhwm.onrender.com)
+- **Demo Video**: [Google Drive Video Showcase](https://drive.google.com/file/d/119eDloJ-WAcqhUt-_Q2qxkZhCRK1gsHi/view?usp=sharing)
 
 ## Table of Contents
 1. [Core Features](#core-features)
