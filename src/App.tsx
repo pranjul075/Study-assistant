@@ -256,7 +256,11 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
+    <div className="min-h-screen bg-[#050505] text-[#e5e2e1] overflow-x-hidden relative pb-12">
+      {/* Cosmic Nebula Blobs */}
+      <div className="nebula-blob bg-primary top-[-10%] left-[-10%]"></div>
+      <div className="nebula-blob bg-secondary bottom-[-10%] right-[-10%]" style={{ animationDelay: '-5s' }}></div>
+
       <Header 
         onToggleHistory={() => setHistoryOpen(!historyOpen)} 
         historyCount={sessions.length}
@@ -272,7 +276,7 @@ export default function App() {
         onClearAll={handleClearAllHistory}
       />
 
-      <main className="main-content">
+      <main className="pt-28 px-4 md:px-margin-desktop max-w-7xl mx-auto space-y-xl">
         {error ? (
           <ErrorFallback 
             message={error} 

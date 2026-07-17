@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Loader2 } from 'lucide-react';
 
 interface InputFormProps {
   onSubmit: (prompt: string) => void;
@@ -63,100 +62,88 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMoc
   };
 
   return (
-    <div className="card input-card glass animate-fade-in">
-      <div className="card-header">
-        <Sparkles size={24} className="text-accent animate-pulse-slow" />
-        <h2>What are we studying today?</h2>
-      </div>
+    <div className="glass-base rounded-3xl p-lg md:p-xl space-y-md w-full max-w-3xl mx-auto relative overflow-hidden">
+      {/* Decorative Glow */}
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[60px] rounded-full"></div>
       
-      <p className="card-desc">
-        Paste your messy class notes, study guides, or simply type a topic you want to master. 
-        Our AI will structure it into an active study kit.
-      </p>
-
-      <form onSubmit={handleSubmit} className="input-form">
-        <div className="textarea-wrapper">
-          <textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="e.g. Paste details about mitochondrial cellular respiration or type 'JavaScript closures vs prototypes'..."
-            disabled={isLoading}
-            maxLength={5000}
-            rows={6}
-            required
-          />
-          <div className="char-count">
-            {prompt.length}/5000
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center py-xl space-y-lg text-center animate-fade-in">
+          <div className="relative w-24 h-24 flex items-center justify-center">
+            {/* Pulsing loading spinner */}
+            <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-full border-t-4 border-r-4 border-primary animate-spin"></div>
+            <span className="material-symbols-outlined text-[36px] text-primary">auto_awesome</span>
           </div>
-        </div>
-
-        {/* Quick template suggestions */}
-        <div className="templates-section">
-          <span className="templates-label">Quick Demos:</span>
-          <div className="templates-chips">
-            {TEMPLATES.map((tpl, i) => (
-              <button
-                key={i}
-                type="button"
-                className="chip-btn"
-                onClick={() => handleApplyTemplate(tpl.text)}
-                disabled={isLoading}
-                title="Click to populate input with sample study text"
-              >
-                <span>{tpl.icon}</span> {tpl.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="form-footer">
-          {isMockMode && (
-            <div className="mock-badge-wrapper">
-              <span className="badge badge-warning animate-pulse-slow">
-                Mock AI Mode Active
-              </span>
-              <span className="mock-tooltip" title="The server detected no GEMINI_API_KEY. It will generate dynamic realistic mock data instantly.">
-                (?)
-              </span>
-            </div>
-          )}
-          
-          <button
-            type="submit"
-            className="btn btn-primary btn-large submit-btn"
-            disabled={isLoading || !prompt.trim()}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="animate-spin" size={20} />
-                <span>Generating Study Kit...</span>
-              </>
-            ) : (
-              <>
-                <Sparkles size={18} />
-                <span>Generate Study Kit</span>
-              </>
-            )}
-          </button>
-        </div>
-      </form>
-
-      {/* Loading Steps Visual Indicator */}
-      {isLoading && (
-        <div className="loading-steps-overlay">
-          <div className="loading-steps-card glass">
-            <Loader2 className="animate-spin text-accent text-large-spin" size={48} />
-            <h3 className="loading-title">AI is working its magic</h3>
-            <div className="progress-bar-container animate-pulse-slow">
-              <div 
-                className="progress-bar-loading" 
-                style={{ width: `${((loadingStepIndex + 1) / LOADING_STEPS.length) * 100}%` }}
-              />
-            </div>
-            <p className="loading-step-text animate-fade-in" key={loadingStepIndex}>
+          <div className="space-y-sm">
+            <h3 className="text-headline-md font-headline-md text-on-surface">Creating Study Space</h3>
+            <p className="text-body-md text-on-surface-variant max-w-md animate-pulse">
               {LOADING_STEPS[loadingStepIndex]}
             </p>
           </div>
+        </div>
+      ) : (
+        <div className="space-y-md animate-fade-in">
+          <div className="flex items-center gap-sm">
+            <span className="material-symbols-outlined text-[28px] text-primary">auto_awesome</span>
+            <h2 className="text-headline-md font-headline-md text-on-surface">What are we studying today?</h2>
+          </div>
+          
+          <p className="text-label-md text-on-surface-variant leading-relaxed">
+            Paste your messy class notes, study guides, or simply type a topic you want to master. 
+            Our AI will structure it into a beautiful, interactive active study kit.
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-md">
+            <div className="relative w-full">
+              <textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="e.g. Paste details about mitochondrial cellular respiration or type 'JavaScript closures vs prototypes'..."
+                maxLength={5000}
+                rows={6}
+                required
+                className="w-full bg-black/40 border border-white/10 rounded-2xl p-md pr-16 text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none"
+              />
+              <div className="absolute bottom-4 right-4 text-[12px] text-on-surface-variant/60 font-mono">
+                {prompt.length}/5000
+              </div>
+            </div>
+
+            {/* Quick template suggestions */}
+            <div className="space-y-sm">
+              <span className="text-[12px] font-bold text-on-surface-variant tracking-wider uppercase">Quick Demos:</span>
+              <div className="flex flex-wrap gap-sm">
+                {TEMPLATES.map((tpl, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => handleApplyTemplate(tpl.text)}
+                    className="glass-nested hover:bg-white/10 hover:border-primary/50 text-on-surface rounded-xl px-4 py-2 text-label-sm font-label-sm flex items-center gap-sm transition-all"
+                  >
+                    <span>{tpl.icon}</span>
+                    <span>{tpl.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-sm flex items-center justify-between">
+              {isMockMode && (
+                <span className="text-tertiary text-label-sm flex items-center gap-xs">
+                  <span className="material-symbols-outlined text-[16px]">info</span>
+                  Mock AI Mode Active
+                </span>
+              )}
+              <button 
+                type="submit" 
+                disabled={!prompt.trim()}
+                className="primary-btn px-xl py-3 rounded-xl text-on-primary font-label-md flex items-center gap-sm ml-auto disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
+                <span>Generate Study Space</span>
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </div>
