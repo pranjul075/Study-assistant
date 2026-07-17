@@ -256,10 +256,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#e5e2e1] overflow-x-hidden relative pb-12 font-body-md">
-      {/* Atmospheric Background Blobs */}
-      <div className="nebula-blob bg-primary top-[-10%] left-[-10%]"></div>
-      <div className="nebula-blob bg-secondary bottom-[-10%] right-[-10%]" style={{ animationDelay: '-5s' }}></div>
+    <div className="min-h-screen bg-[#131314] text-[#e5e2e3] overflow-x-hidden relative font-body-md">
 
       <Header 
         onToggleHistory={() => setHistoryOpen(!historyOpen)} 
@@ -276,7 +273,7 @@ export default function App() {
         onClearAll={handleClearAllHistory}
       />
 
-      <main className="pt-28 px-4 md:px-margin-desktop max-w-7xl mx-auto space-y-xl">
+      <main className="pt-28 pb-16 px-margin-mobile md:px-margin-desktop max-w-max-width mx-auto relative">
         {error ? (
           <ErrorFallback 
             message={error} 
