@@ -1,5 +1,8 @@
 # AuraStudy – AI-Powered Study Assistant
 
+- **Live Project Demo**: [study-assistant-dhwm.onrender.com](https://study-assistant-dhwm.onrender.com)
+- **Demo Video**: [Google Drive Video Showcase](https://drive.google.com/file/d/119eDloJ-WAcqhUt-_Q2qxkZhCRK1gsHi/view?usp=sharing)
+
 AuraStudy is a web application that helps students and professionals convert unstructured text notes or study topics into active learning sets. The app parses materials into three interactive modules: 3D double-sided flashcards, customizable multiple-choice quizzes, and structured concept checklists.
 
 To protect API credentials, client requests are routed through a secure Node.js proxy server that calls the Gemini 1.5 Flash API. The system handles unstructured outputs reliably by enforcing schema validation, normalizing parsed JSON, and managing request cancellations.
@@ -14,6 +17,7 @@ To protect API credentials, client requests are routed through a secure Node.js 
 7. [AI Usage Disclosure](#ai-usage-disclosure)
 8. [System Architecture & Error Handling](#system-architecture--error-handling)
 9. [Known Limitations & Future Scope](#known-limitations--future-scope)
+10. [Time Spent](#time-spent)
 
 ---
 
@@ -165,3 +169,19 @@ When the user refines their study guide, we compare incoming questions against t
 - **No Streaming Support**: Future versions will use `generateContentStream()` and Server-Sent Events (SSE) to render parts of the cards as they generate.
 - **Tab State Resets**: Switching tabs currently resets active quiz response histories. Moving the current quiz state up to the dashboard controller is planned.
 - **LocalStorage Storage Limits**: Currently uses browser storage. Adding a lightweight SQLite or Postgres backend with user authentication would allow cross-device sync.
+
+---
+
+## Time Spent
+
+Here is the breakdown of the 8 hours spent on developing this project:
+
+| Phase / Task | Duration | Details |
+| :--- | :--- | :--- |
+| **Project Setup & Backend Proxy** | 1.0 hr | Initializing React/Vite, Express backend, dependency installation, and routing configurations. |
+| **UI Design System & Styling** | 1.5 hrs | Establishing the Vanilla CSS design system, dark-mode glassmorphism, responsive dashboard layout, and 3D card flip animations. |
+| **AI Integration & Schema Validation** | 1.5 hrs | Integrating Google Gemini 1.5 Flash SDK, prompt tuning, server-side JSON sanitization/validation, and mock AI fallback mechanism. |
+| **Interactive Study Modules** | 2.5 hrs | Developing the 3D Flashcards (with keyboard shortcuts), Quiz state machine (including re-testing of incorrect answers), and Milestone checklist. |
+| **State Management & Refinement Loop** | 1.0 hr | Coding the prompt refinement input, App-level state orchestration, localStorage session history sidebar, and smart merging logic. |
+| **Deployment & Verification** | 0.5 hr | Deployment setup on Render, verifying production builds, and documentation. |
+| **Total Time** | **8.0 hrs** | |
