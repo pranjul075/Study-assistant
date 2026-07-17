@@ -2,8 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -16,7 +21,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (curl, Render health checks)
+    // Allow requests with no origin (curl, Render health checks, same-origin)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -24,6 +29,10 @@ app.use(cors({
     }
   }
 }));
+
+// Serve built frontend static files (production)
+const distPath = path.join(__dirname, '..', 'dist');
+app.use(express.static(distPath));
 app.use(express.json());
 
 // Helper function to sleep (to simulate network latency for loading states)
@@ -340,6 +349,11 @@ Please update the study guide to incorporate this feedback. Keep unchanged compo
       details: err.message
     });
   }
+});
+
+// Catch-all: serve React app for any non-API route (SPA support)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
