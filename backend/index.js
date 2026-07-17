@@ -13,22 +13,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Allow both local dev and deployed frontend
-const allowedOrigins = [
-  'http://localhost:5173',
-  process.env.FRONTEND_URL,
-].filter(Boolean);
-
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (curl, Render health checks, same-origin)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS blocked: ${origin}`));
-    }
-  }
-}));
+// Enable CORS for all requests (since this is a public API without session cookies)
+app.use(cors());
 
 // Serve built frontend static files (production)
 const distPath = path.join(__dirname, '..', 'dist');
